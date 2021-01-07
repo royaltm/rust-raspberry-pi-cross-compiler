@@ -14,6 +14,10 @@ Usage
 -----
 
 ```
+source rust-raspberry-pi-cross-compiler/config.sh
+# or
+export RPXC_IMAGE=pi-rust
+
 cd rust-repository
 rpxc cargo build --release
 ```
