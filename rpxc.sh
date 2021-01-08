@@ -101,7 +101,7 @@ command:commit() {
         $USER_IDS \
         $FINAL_ARGS \
         $FINAL_IMAGE "$@"
-    docker commit $CONTAINER $FINAL_IMAGE
+    docker commit --change "ENV RPXC_UID=" --change "ENV RPXC_GID=" $CONTAINER $FINAL_IMAGE
     docker rm -f $CONTAINER
     echo Updated image: $FINAL_IMAGE.
 }
