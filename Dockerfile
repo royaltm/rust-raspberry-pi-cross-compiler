@@ -1,13 +1,16 @@
 FROM sdthirlwall/raspberry-pi-cross-compiler
 
-# RUN install-debian --update build-essential
-RUN install-raspbian --update libxkbcommon-dev libwayland-dev libasound2-dev
+RUN install-debian --update libssl-dev pkgconf
+RUN install-raspbian --update libxkbcommon-dev libwayland-dev libasound2-dev libssl-dev pkgconf
 
-ENV XKBCOMMON_LIB_DIR=$SYSROOT/usr/lib/arm-linux-gnueabihf
+# to help guiding rust pkg_config
+ENV TARGET_PKG_CONFIG_PATH=
+ENV TARGET_PKG_CONFIG_SYSROOT_DIR=${SYSROOT}
+ENV TARGET_PKG_CONFIG_LIBDIR=${SYSROOT}/usr/lib/pkgconfig:${SYSROOT}/usr/share/pkgconfig:${SYSROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig
 
 # fix for libpthread.so
-RUN ln -fs $SYSROOT/lib/arm-linux-gnueabihf /lib/arm-linux-gnueabihf
-RUN ln -fs $SYSROOT/usr/lib/arm-linux-gnueabihf /usr/lib/arm-linux-gnueabihf
+RUN ln -fs $SYSROOT/lib/arm-linux-gnueabihf /lib/arm-linux-gnueabihf && \
+    ln -fs $SYSROOT/usr/lib/arm-linux-gnueabihf /usr/lib/arm-linux-gnueabihf
 
 RUN mkdir -p /opt/rust/
 ENV CARGO_HOME=/opt/rust/cargo
